@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "121571739816",
+    "project_id": "repair-miniproject-248e2",
+    "storage_bucket": "repair-miniproject-248e2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121571739816:android:e6f2e4477b309f8aa65a9d",
+        "android_client_info": {
+          "package_name": "com.example.vehiclerepair_miniproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAO_dM_N0LTT5D1sNfVJysy1TZuAUDgid4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
