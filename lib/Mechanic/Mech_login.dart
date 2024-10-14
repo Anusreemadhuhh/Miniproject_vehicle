@@ -1,8 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../User/User_mechanic_list.dart';
+import '../home.dart';
 import 'Mechanic_signup.dart';
 
 
@@ -12,8 +15,44 @@ class Mechanic_login extends StatefulWidget {
   @override
   State<Mechanic_login> createState() => _Mechanic_loginState();
 }
+ String id ="";
 
 class _Mechanic_loginState extends State<Mechanic_login> {
+  void mechLogin() async {
+    final user = await FirebaseFirestore.instance
+        .collection('MechSignup')//collectionname koduknm edhano vecha
+        .where('Username', isEqualTo: username_ctrl.text)
+        .where('password', isEqualTo: password_ctrl.text)
+
+        .get();
+    if (user.docs.isNotEmpty) {
+      id = user.docs[0].id;
+
+
+      SharedPreferences data = await SharedPreferences.getInstance();
+      data.setString('id', id);//edh user ahn verune nn programe nn mansailvan ahn.
+
+      Navigator.push(context, MaterialPageRoute(
+        builder: (context) {
+          return Home();
+        },
+      ));
+    }
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+            "username and password error",
+            style: TextStyle(color: Colors.red),
+          )));
+    }
+
+
+  }
+
+  var username_ctrl = TextEditingController();
+  var password_ctrl = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,6 +105,13 @@ class _Mechanic_loginState extends State<Mechanic_login> {
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) ;
+                        {
+                          return "Invalid username";
+                        }
+                      },
+                      controller: username_ctrl,
                       decoration: InputDecoration(
                           hintText: 'Username',
                           focusColor: Colors.white,
@@ -101,6 +147,13 @@ class _Mechanic_loginState extends State<Mechanic_login> {
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) ;
+                        {
+                          return "Invalid password";
+                        }
+                      },
+                      controller:password_ctrl ,
                       decoration: InputDecoration(
                           hintText: 'Enter Passsword',
                           focusColor: Colors.white,
@@ -128,12 +181,9 @@ class _Mechanic_loginState extends State<Mechanic_login> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 30),
-                child: InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
-                      return User_mechanic_list();
-                    },));
-                  },
+                child: InkWell(onTap: () {
+                  mechLogin();
+                },
                   child: Container(
                     height: 50.h,
                     width: 220.w,

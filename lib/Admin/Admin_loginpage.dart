@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:vehiclerepair_miniproject/home.dart';
 
 import 'Navigationpage.dart';
 
@@ -12,6 +14,7 @@ class Adminloginpage extends StatefulWidget {
 }
 
 class _AdminloginpageState extends State<Adminloginpage> {
+
   final formkey = GlobalKey<FormState>(); //for validations
   @override
   Widget build(BuildContext context) {
@@ -58,7 +61,7 @@ class _AdminloginpageState extends State<Adminloginpage> {
                       },
                       decoration: InputDecoration(
                           prefixIcon: Icon(Icons.person),
-                          hintText: ("Username "),
+                          hintText: ("Username"),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10)),
                           fillColor: Colors.white,
@@ -72,7 +75,7 @@ class _AdminloginpageState extends State<Adminloginpage> {
                 child: Column(
                   children: [Row(
                     children: [
-                      Text("Enter Password",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                      Text("Password",style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
                     ],
                   ),
                     TextFormField(
