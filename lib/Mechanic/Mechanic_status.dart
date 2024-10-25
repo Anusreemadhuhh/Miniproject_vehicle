@@ -1,12 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'Mech_profile.dart';
 import 'Mechanic_navigation.dart';
 
 
 class Mechanic_status extends StatefulWidget {
-  const Mechanic_status({super.key});
+  const Mechanic_status({super.key, required this.User_id, required this.Name, required this.Work, required this.Date, required this.Time, required this.User_phn_no});
+  final User_id;
+  final Name;
+  final Work;
+  final Date;
+  final Time;
+  final User_phn_no;
 
   @override
   State<Mechanic_status> createState() =>
@@ -14,7 +22,33 @@ class Mechanic_status extends StatefulWidget {
 }
 
 class _Mechanic_statusState extends State<Mechanic_status> {
+  Future<void> Amount_add() async {
+    FirebaseFirestore.instance
+        .collection("User_request")
+        .doc(widget.User_id)
+        .update({'Amount': Amount_ctrl.text, 'Payment': 3});
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) {
+        return Mechanic_navigation();
+      },
+    ));
+  }
+
+
+  var Reject_res_ctrl = TextEditingController();
+  Future<void> Reject_reason() async {
+    FirebaseFirestore.instance
+        .collection("User_request")
+        .doc(widget.User_id)
+        .update({'Reject_reason': Reject_res_ctrl.text, 'Payment': 4});
+    Navigator.push(context, MaterialPageRoute(
+      builder: (context) {
+        return Mechanic_navigation();
+      },
+    ));
+  }
   String _status = 'Completed';
+  var Amount_ctrl=TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +84,7 @@ class _Mechanic_statusState extends State<Mechanic_status> {
                                 height: 10.h,
                               ),
                               Text(
-                                "Name",
+                                widget.Name,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold),
@@ -66,7 +100,7 @@ class _Mechanic_statusState extends State<Mechanic_status> {
                           Column(
                             children: [
                               Text(
-                                "Fuel Leaking",
+                                widget.Work,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w900),
@@ -75,7 +109,7 @@ class _Mechanic_statusState extends State<Mechanic_status> {
                                 height: 10.h,
                               ),
                               Text(
-                                "Date",
+                                widget.Date,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600),
@@ -84,7 +118,7 @@ class _Mechanic_statusState extends State<Mechanic_status> {
                                 height: 10.h,
                               ),
                               Text(
-                                "Time",
+                                widget.Time,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600),
@@ -93,7 +127,7 @@ class _Mechanic_statusState extends State<Mechanic_status> {
                                 height: 10.h,
                               ),
                               Text(
-                                "Place",
+                               widget.User_phn_no ,
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.w600),
@@ -206,6 +240,7 @@ class _Mechanic_statusState extends State<Mechanic_status> {
                         height: 60.h,
                         width: 250.w,
                         child: TextFormField(
+                          controller: Amount_ctrl,
                           decoration: InputDecoration(
                               prefixIcon: Icon(Icons.currency_rupee),
                               hintText: "amount",
@@ -224,6 +259,26 @@ class _Mechanic_statusState extends State<Mechanic_status> {
                       ),
                       SizedBox(
                         height: 100.h,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Amount_add();
+                        },
+                        child: Container(
+                          height: 60.h,
+                          width: 230.w,
+                          decoration: BoxDecoration(
+                              color: Colors.blue.shade900,
+                              borderRadius: BorderRadius.circular(10.r)),
+                          child: Center(
+                              child: Text(
+                                'Submit',
+                                style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              )),
+                        ),
                       ),
                     ],
                   ):
@@ -253,6 +308,7 @@ class _Mechanic_statusState extends State<Mechanic_status> {
                         child: Container(
 
                           child: TextFormField(
+                            controller: Reject_res_ctrl,
                             minLines: 5,
                             maxLines: 10,
                             decoration: InputDecoration(
@@ -274,35 +330,32 @@ class _Mechanic_statusState extends State<Mechanic_status> {
                       SizedBox(
                         height: 50.h,
                       ),
+                      InkWell(
+                        onTap: () {
+                          Reject_reason();
+                        },
+                        child: Container(
+                          height: 60.h,
+                          width: 230.w,
+                          decoration: BoxDecoration(
+                              color: Colors.blue.shade900,
+                              borderRadius: BorderRadius.circular(10.r)),
+                          child: Center(
+                              child: Text(
+                                'Submit',
+                                style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              )),
+                        ),
+                      ),
                     ],
                   ),
 
                 ),
 
-                InkWell(
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return Mechanic_profile();
-                      },
-                    ));
-                  },
-                  child: Container(
-                    height: 60.h,
-                    width: 230.w,
-                    decoration: BoxDecoration(
-                        color: Colors.blue.shade900,
-                        borderRadius: BorderRadius.circular(10.r)),
-                    child: Center(
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        )),
-                  ),
-                ),
+
               ],
             ),
           ),

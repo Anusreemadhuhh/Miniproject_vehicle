@@ -63,32 +63,46 @@ class _AdminNotificationpageState extends State<AdminNotificationpage> {
                         final doc = notify[index];
                         final admin_notificationpage = doc .data() as Map<String, dynamic>;
                         return Card(
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    "${admin_notificationpage["Matter"] ?? ""}",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "${admin_notificationpage["Content"] ?? ""}",
-                                    style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.normal),
-                                  ),
-                                ],
-                              ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "${admin_notificationpage["Matter"] ?? ""}",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "${admin_notificationpage["Content"] ?? ""}",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "${admin_notificationpage["Date"] ?? ""}",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ],
+                                ),
 
-                            ],
+                              ],
+                            ),
                           ),
                         );
                       },

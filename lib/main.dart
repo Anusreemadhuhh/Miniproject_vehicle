@@ -10,6 +10,7 @@ import 'Admin/Navigationpage.dart';
 import 'Mechanic/Mech_login.dart';
 import 'Mechanic/Mech_profile.dart';
 import 'Mechanic/Mechanic_signup.dart';
+import 'Mechanic/Mechanic_status.dart';
 import 'Mechanic/Mechedit_profile.dart';
 import 'User/Payment_successful..dart';
 import 'User/User_login.dart';

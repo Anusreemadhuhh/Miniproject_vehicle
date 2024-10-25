@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../Mechanic/Mech_login.dart';
-import '../home.dart';
 import 'User_mechanic_list.dart';
 import 'User_signup.dart';
 
@@ -22,16 +20,14 @@ class _User_loginState extends State<User_login> {
   void userLogin() async {
     final user = await FirebaseFirestore.instance
         .collection('UserSignup')
-        .where('Username', isEqualTo: username_ctrl.text)
-        .where('Password', isEqualTo: password_ctrl.text)
-
+        .where('Email',isEqualTo: email_ctrl.text)
+        .where('Password',isEqualTo: password_ctrl.text)
+        .where("State",isEqualTo: 1)
         .get();
     if (user.docs.isNotEmpty) {
       id = user.docs[0].id;
-
-
       SharedPreferences data = await SharedPreferences.getInstance();
-      data.setString('id', id);
+      data.setString('User_id', id);
 
       Navigator.push(context, MaterialPageRoute(
         builder: (context) {
@@ -42,15 +38,13 @@ class _User_loginState extends State<User_login> {
     else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
-            "username and password error",
+            "email and password error",
             style: TextStyle(color: Colors.red),
           )));
     }
-
-
   }
 
-  var username_ctrl = TextEditingController();
+  var email_ctrl = TextEditingController();
   var password_ctrl = TextEditingController();
 
 
@@ -94,7 +88,7 @@ class _User_loginState extends State<User_login> {
                         width: 10.w,
                       ),
                       Text(
-                        'Enter Username',
+                        'Enter Your Email',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18.sp),
                       ),
@@ -106,8 +100,9 @@ class _User_loginState extends State<User_login> {
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     child: TextFormField(
+                      controller: email_ctrl,
                       decoration: InputDecoration(
-                          hintText: 'Username',
+                          hintText: ' Enter Email Id',
                           focusColor: Colors.white,
                           border: OutlineInputBorder(
                               borderSide: BorderSide.none,
@@ -141,6 +136,7 @@ class _User_loginState extends State<User_login> {
                   Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     child: TextFormField(
+                      controller: password_ctrl,
                       decoration: InputDecoration(
                           hintText: 'Enter Passsword',
                           focusColor: Colors.white,

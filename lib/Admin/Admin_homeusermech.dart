@@ -18,7 +18,7 @@ class Adminusermech extends StatelessWidget {
           toolbarHeight: 95,
           backgroundColor: Colors.blue.shade50,
           title: CircleAvatar(
-            backgroundImage: AssetImage("assets/girl.jpeg"),
+            backgroundImage: AssetImage("assets/Profile.png"),
             radius: 27,
           ),
           bottom: TabBar(
@@ -94,7 +94,7 @@ class User extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
                 child: InkWell(onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return AdminUser();
+                    return AdminUser(id : doc.id);
                   },));
                 },
                   child: Card(
@@ -194,7 +194,7 @@ class Mechanic extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 15),
                 child: InkWell(onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return AdminMechanic();
+                    return AdminMechanic(id: doc.id);
                   },));
                 },
                   child: Card(
@@ -216,7 +216,7 @@ class Mechanic extends StatelessWidget {
                               Padding(
                                 padding: const EdgeInsets.only(right: 82),
                                 child: Text(
-                                  "Name:${mechsignupppage["Username"] ?? ""}",
+                                  "Username:${mechsignupppage["Username"] ?? ""}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold,

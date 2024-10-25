@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:vehiclerepair_miniproject/Admin/Admin_Notificationpage.dart';
 
 class Add_notification extends StatefulWidget {
@@ -15,12 +16,14 @@ class _Add_notificationState extends State<Add_notification> {
     FirebaseFirestore.instance.collection("Admin_notification").add({
       "Matter":Matter_ctrl.text,
       "Content":Content_ctrl.text,
+      "Date":formatdate,
     });
     print("Added Successfully");
     Navigator.push(context, MaterialPageRoute(builder: (context) {
       return AdminNotificationpage();
     },));
   }
+  String formatdate = DateFormat('dd-MM-yyyy-kk:mm').format(DateTime.now());
   var Matter_ctrl = TextEditingController();
   var Content_ctrl = TextEditingController();
 
