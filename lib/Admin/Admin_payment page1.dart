@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -31,60 +32,74 @@ class _AdminPaymentpageState extends State<AdminPaymentpage> {
               ],
             ),
             Expanded(
-                child: ListView.builder(
-                  itemCount: 20,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      child: Column(
-                        children: [
-                          Row(
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance.collection("User_request").where("Payment",isEqualTo: 5).snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Text("${snapshot.error}");
+                    }
+                    final Payment=snapshot.data?.docs??[];
+                    return  ListView.builder(
+                      itemCount: Payment.length,
+                      itemBuilder: (context, index) {
+                        final doc=Payment[index];
+                        final Transactions = doc.data() as Map<String,dynamic>;
+                        return Card(
+                          child: Column(
                             children: [
-                              Text(
-                                " Name",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.normal),
+                              Row(
+                                children: [
+                                  Text(
+                                    " ${Transactions["User_name"] ?? ""}",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  SizedBox(width: 230,),
+                                  Text("${Transactions["Date"] ?? ""}")
+                                ],
                               ),
-                              SizedBox(width: 230,),
-                              Text("10/11/23")
+                              Row(
+                                children: [ Icon(Icons.attach_money),
+                                  Text(
+                                    "${Transactions["Amount"] ?? ""}",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${Transactions["Work"] ?? ""}",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text(
+                                    "${Transactions["Mech_name"] ?? ""}",
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                ],
+                              ),
                             ],
                           ),
-                          Row(
-                            children: [ Icon(Icons.attach_money),
-                              Text(
-                                "5455",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "service",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Mechanic Name",
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.normal),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     );
                   },
                 ))

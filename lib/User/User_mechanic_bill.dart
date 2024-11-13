@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vehiclerepair_miniproject/User/User_rating.dart';
 
 import 'Payment_successful..dart';
 import 'User_login.dart';
@@ -133,11 +134,21 @@ class _User_mechanic_billState extends State<User_mechanic_bill> {
                       size: 28.sp,
                     ),
                     SizedBox(width: 10.w,),
-                    Icon(
-                      Icons.edit,
-                      color: Colors.black,
-                      size: 20.sp,
-                    ),
+                   IconButton(onPressed:  () {
+                     Navigator.push(context, MaterialPageRoute(builder: (context) {
+                       return User_rating(
+                         id:widget.id,
+                           Name:widget.Name,
+                         Experience:widget.Experience,
+
+
+                       );
+                     },));
+                   }, icon:  Icon(
+                     Icons.edit,
+                     color: Colors.black,
+                     size: 20.sp,
+                   ),)
                   ],
                 ),
                 SizedBox(

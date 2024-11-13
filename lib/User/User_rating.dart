@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -5,13 +6,23 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class User_rating extends StatefulWidget {
-  const User_rating({super.key});
+  const User_rating({super.key, required this.id, required this.Name, required this.Experience});
+  final id;
+  final Name;
+  final Experience;
 
   @override
   State<User_rating> createState() => _User_ratingState();
 }
 
 class _User_ratingState extends State<User_rating> {
+  Future<void> Rating() async {
+    FirebaseFirestore.instance
+        .collection("User_request")
+        .doc(widget.id)
+        .update({ 'Rating': 5});
+   Navigator.of(context).pop();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +56,7 @@ class _User_ratingState extends State<User_rating> {
                 height: 15.h,
               ),
               Text(
-                "Name",
+                widget.Name,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 25.sp,
@@ -55,7 +66,7 @@ class _User_ratingState extends State<User_rating> {
                 height: 5.h,
               ),
               Text(
-                "2+ Year Experiance",
+              widget.Experience,
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 20.sp,

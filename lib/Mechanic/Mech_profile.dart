@@ -1,7 +1,10 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart'as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Mechanic_navigation.dart';
@@ -16,18 +19,74 @@ class Mechanic_profile extends StatefulWidget {
 }
 
 class _Mechanic_profileState extends State<Mechanic_profile> {
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     Get_data_sp();
   }
+  PickedFile? _image;
+  Future<void> _getImage() async {
+    final pickedFile =
+    await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = PickedFile(pickedFile.path);
+        print("picked image");
+        update();
+      } else {
+        print('No image selected.');
+      }
+    });
+  }
+
+  Future<void> update() async {
+    try {
+      if (_image != null) {
+        final ref = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child('Mech_Images')
+            .child(DateTime.now().millisecondsSinceEpoch.toString());
+        await ref.putFile(File(_image!.path));
+
+        final imageURL = await ref.getDownloadURL();
+
+        await FirebaseFirestore.instance
+            .collection('MechSignup')
+            .doc(id)
+            .update({
+          'Profile': imageURL,
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Profile updated successfully'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No image selected'),
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error updating profile: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Error updating profile'),
+        ),
+      );
+    }
+  }
 
   var id;
   Future<void> Get_data_sp() async {
     SharedPreferences data = await SharedPreferences.getInstance();
     setState(() {
-      id = data.getString("id");
+      id = data.getString("Mech_id");
 
       print("Get Successful//////////////////");
       print(id);
@@ -49,8 +108,10 @@ class _Mechanic_profileState extends State<Mechanic_profile> {
       future: Getbyid(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator(
-            color: Colors.blue,
+          return Center(
+            child: CircularProgressIndicator(
+              color: Colors.blue,
+            ),
           );
         }
         if (snapshot.hasError) {
@@ -100,6 +161,9 @@ class _Mechanic_profileState extends State<Mechanic_profile> {
                   padding: const EdgeInsets.only(right: 30, left: 30, top: 20),
                   child: Column(
                     children: [
+                      ElevatedButton(onPressed: () {
+                        _getImage();
+                      }, child: Text("Pick")),
                       Container(
                         width: 100.w,
                         height: 100.h,
@@ -107,7 +171,7 @@ class _Mechanic_profileState extends State<Mechanic_profile> {
                             color: Colors.blue.shade50,
                             borderRadius: BorderRadius.circular(100),
                             image: DecorationImage(
-                                image: AssetImage("assets/Profile.png"),
+                                image: NetworkImage(Profile!["Profile"]),
                                 fit: BoxFit.cover)),
                       ),
                       SizedBox(
